@@ -2,12 +2,37 @@
 # Install with: python -m pip install -r requirements.txt
 
 # Core TTS libraries
-edge-tts>=0.1.0
-gTTS>=2.4.0
+edge-tts>=7.2.7
+# edge-tts pulls in aiohttp, requests, yarl, etc. pinned below
+
+gTTS>=2.5.4
+
+# Networking
 aiohttp>=3.8.0
+requests>=2.32.5
+urllib3>=2.6.3
+# auxiliary async libs used by aiohttp
+aiohappyeyeballs>=2.6.1
+aiosignal>=1.4.0
+frozenlist>=1.8.0
+multidict>=6.7.1
+yarl>=1.23.0
 
 # Audio processing and concatenation
 pydub>=0.25.1
+
+# Data handling (used in notebooks)
 numpy>=1.21.0
 scipy>=1.7.0
+pandas>=2.2.2
+
+# Miscellaneous
+click>=8.1.8
+certifi>=2026.2.25
+charset-normalizer>=3.4.4
+idna>=3.11
+tabulate>=0.9.0
+typing_extensions>=4.15.0
+propcache>=0.4.1
+attrs>=25.4.0
 
