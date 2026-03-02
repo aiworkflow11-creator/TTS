@@ -1,0 +1,8 @@
+# Requirements for the TTS notebook
+# Install with: python -m pip install -r requirements.txt
+
+edge-tts
+gTTS
+aiohttp
+pydub
+playsound
