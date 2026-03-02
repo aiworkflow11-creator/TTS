@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Audio Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .button-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #d4edda;
+            border-radius: 6px;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-weight: 600;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 6px;
+        }
+        
+        audio {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            padding: 10px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        .character-name {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Story Audio Generator</h1>
+        <p class="subtitle">Enter a character name and hear the story</p>
+        
+        <div class="info-box">
+            ℹ️ This Hindi story will be narrated with a natural, human-like male voice at a conversational pace with your chosen character name.
+        </div>
+        
+        <form id="storyForm">
+            <div class="form-group">
+                <label for="characterName">Character Name:</label>
+                <input 
+                    type="text" 
+                    id="characterName" 
+                    name="name" 
+                    placeholder="Enter a name (e.g., Saurabh, Priya, etc.)" 
+                    required
+                    maxlength="50"
+                >
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="splitCheckbox" checked>
+                <label for="splitCheckbox" style="display:inline; font-weight:normal;">Split story into sections</label>
+            </div>
+            
+            <button type="submit" id="generateBtn">
+                <div class="button-content">
+                    <span class="spinner" id="spinner"></span>
+                    <span id="btnText">🎵 Generate Audio</span>
+                </div>
+            </button>
+        </form>
+        
+        <div class="result" id="result">
+            <div id="message"></div>
+            <audio id="audioPlayer" controls></audio>
+            <button class="download-btn" id="downloadBtn">⬇️ Download Audio</button>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('storyForm');
+        const characterInput = document.getElementById('characterName');
+        const generateBtn = document.getElementById('generateBtn');
+        const spinner = document.getElementById('spinner');
+        const btnText = document.getElementById('btnText');
+        const resultDiv = document.getElementById('result');
+        const messageDiv = document.getElementById('message');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const splitCheckbox = document.getElementById('splitCheckbox');
+        
+        let currentFilename = null;
+        let playlist = [];
+        let currentIndex = 0;
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const characterName = characterInput.value.trim();
+            
+            if (!characterName) {
+                showError('Please enter a character name');
+                return;
+            }
+            
+            // reset previous audio state
+            playlist = [];
+            currentIndex = 0;
+            currentFilename = null;
+            messageDiv.innerHTML = '';
+            resultDiv.classList.remove('show');
+            
+            // Disable button and show loading state
+            generateBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+            btnText.textContent = ' Generating...';
+            
+            try {
+                const endpoint = splitCheckbox.checked ? '/generate_playlist' : '/generate';
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: characterName })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // if returned multiple files use playlist logic
+                    if (data.files && data.files.length > 1) {
+                        playlist = data.files;
+                        currentIndex = 0;
+                        audioPlayer.src = `/download/${playlist[0]}`;
+                        audioPlayer.play();
+                        showSuccess(data.message, characterName);
+                        renderPlaylist(playlist);
+                    } else {
+                        currentFilename = data.filename;
+                        showSuccess(data.message, characterName);
+                        audioPlayer.src = `/download/${data.filename}`;
+                    }
+                } else {
+                    showError(data.error || 'Failed to generate audio');
+                }
+            } catch (error) {
+                showError('Error: ' + error.message);
+            } finally {
+                // Re-enable button and hide loading state
+                generateBtn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = '🎵 Generate Audio';
+            }
+        });
+        
+        downloadBtn.addEventListener('click', () => {
+            if (playlist.length > 0) {
+                const a = document.createElement('a');
+                a.href = `/download/${playlist[currentIndex]}`;
+                a.download = playlist[currentIndex];
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else if (currentFilename) {
+                const a = document.createElement('a');
+                a.href = `/download/${currentFilename}`;
+                a.download = currentFilename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        });
+        
+        function showSuccess(message, characterName) {
+            messageDiv.innerHTML = `
+                <div class="success-message">
+                    ✅ ${message}
+                    <br><small>Story featuring <span class="character-name">${characterName}</span></small>
+                </div>
+            `;
+            resultDiv.classList.add('show');
+        }
+        
+        function renderPlaylist(files) {
+            let listHtml = '<p><strong>Playlist:</strong></p><ul>';
+            files.forEach((f, idx) => {
+                listHtml += `<li>${idx+1}. ${f}</li>`;
+            });
+            listHtml += '</ul>';
+            messageDiv.innerHTML += listHtml;
+        }
+        
+        function showError(error) {
+            messageDiv.innerHTML = `<div class="error-message">❌ ${error}</div>`;
+            resultDiv.classList.add('show');
+            audioPlayer.src = '';
+        }
+        
+        // autoplay next track when current ends
+        audioPlayer.addEventListener('ended', () => {
+            currentIndex++;
+            if (currentIndex < playlist.length) {
+                audioPlayer.src = `/download/${playlist[currentIndex]}`;
+                audioPlayer.play();
+            }
+        });
+
+        // Focus on input when page loads
+        characterInput.focus();
+    </script>
+</body>
+</html>

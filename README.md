@@ -59,3 +59,23 @@ Files of interest
 License / Notes
 ----------------
 This is a small example project for local experimentation with TTS libraries. Be mindful of license and API usage limits for third-party services.
+
+
+## Web App Versions
+
+Two Flask-based demo applications are included in this repository:
+
+* **original_app/** – simple single-audio generator (no story splitting). Runs on port 5001. Useful for quick demos.
+* **split_app/** – enhanced generator with paragraph splitting and playlist playback; includes UI checkbox to toggle. Runs on port 5000.
+
+Each subfolder contains its own `app.py`, `templates/`, and a `SETUP.md` with instructions. Both share the common `requirements.txt` at project root.
+
+To try either app:
+
+```bash
+cd original_app
+python app.py   # open http://localhost:5001
+# or
+cd ../split_app
+python app.py   # open http://localhost:5000
+```
