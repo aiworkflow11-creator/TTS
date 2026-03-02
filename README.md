@@ -24,7 +24,17 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-3. Run the notebook in Jupyter or open `tts-test.ipynb` in VS Code and run the cells.
+3. (Optional) create a dedicated Jupyter kernel so notebooks use the same environment:
+
+```bash
+# after activating the virtualenv above
+pip install ipykernel
+python -m ipykernel install --user --name tts-env --display-name "Python (tts-env)"
+```
+
+You can then select the **Python (tts-env)** kernel when opening `tts-test.ipynb` in Jupyter or VS Code.
+
+4. Run the notebook in Jupyter or open `tts-test.ipynb` in VS Code and run the cells.
 
 Notes on usage
 --------------
