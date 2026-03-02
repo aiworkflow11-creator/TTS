@@ -11,7 +11,8 @@ STORY_PATH = Path("/workspaces/TTS/input/hindi_story_v2.txt")
 OUTPUT_DIR = Path("/workspaces/TTS/output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 # delimiter used to split story into sections
-SECTION_DELIMITER = "\n\n"  # two newlines separate paragraphs
+# SECTION_DELIMITER = "\n\n"  # two newlines separate paragraphs
+SECTION_DELIMITER = "[NAME]"  # two newlines separate paragraphs
 VOICE = "hi-IN-MadhurNeural"  # Male voice in Hindi
 
 def read_story():

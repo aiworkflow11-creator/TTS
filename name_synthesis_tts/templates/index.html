@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Name‑synthesis TTS</title>
+<style>body{font-family:sans-serif;padding:2rem}button{margin:0.5rem 0;padding:0.5rem 1rem}#status{margin-top:1rem}</style>
+</head>
+<body>
+<h1>Name‑synthesis demo</h1>
+<button id="prepare">Prepare base audio</button>
+<div id="status"></div>
+<hr>
+<form id="form">
+<label>Name: <input type="text" id="name" required></label>
+<button type="submit">Synthesize story</button>
+</form>
+<div id="result"></div>
+<audio id="player" controls style="display:none;width:100%;margin-top:1rem"></audio>
+<script>
+const prepareBtn=document.getElementById('prepare');
+const statusDiv=document.getElementById('status');
+prepareBtn.onclick=async()=>{
+ statusDiv.textContent='Preparing…';
+ const r=await fetch('/prepare',{method:'POST'});
+ const j=await r.json();
+ statusDiv.textContent='Base saved: '+(j.saved||[]).join(',');
+};
+const form=document.getElementById('form');
+const player=document.getElementById('player');
+const result=document.getElementById('result');
+form.onsubmit=async e=>{
+ e.preventDefault();
+ const name=document.getElementById('name').value.trim();
+ const r=await fetch('/synthesize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name})});
+ const j=await r.json();
+ if(r.ok){
+  result.textContent='Generated '+j.file;
+  player.src='/download/'+j.file;
+  player.style.display='block';
+  player.play();
+ } else {
+  result.textContent='Error: '+j.error;
+ }
+};
+</script>
+</body>
+</html>
