@@ -7,7 +7,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Configuration for the original (single‑file) app
-STORY_PATH = Path("/workspaces/TTS/input/hindi_story_v2.txt")
+STORY_PATH = Path("/workspaces/TTS/input/hindi_storytxt")
 OUTPUT_DIR = Path("/workspaces/TTS/output/original")
 OUTPUT_DIR.mkdir(exist_ok=True)
 VOICE = "hi-IN-MadhurNeural"  # male Hindi voice
@@ -20,8 +20,8 @@ async def generate_audio(text: str, character_name: str) -> Path:
     communicate = edge_tts.Communicate(
         text,
         VOICE,
-        rate="-8%",
-        pitch="+0Hz",
+        rate="-12%",
+        pitch="-5Hz",
         volume="-5%"
     )
     await communicate.save(str(output_file))
