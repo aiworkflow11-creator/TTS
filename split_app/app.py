@@ -7,7 +7,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Configuration
-STORY_PATH = Path("/workspaces/TTS/input/hindi_story_v2.txt")
+STORY_PATH = Path("/workspaces/TTS/input/hindi_story.txt")
 OUTPUT_DIR = Path("/workspaces/TTS/output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 # delimiter used to split story into sections
@@ -33,7 +33,8 @@ async def generate_audio(text, character_name):
     # Create unique filename with timestamp
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     safe_name = "".join(c if c.isalnum() else "_" for c in character_name)
-    output_file = OUTPUT_DIR / f"story_{safe_name}_{timestamp}.mp3"
+    output_file = OUTPUT_DIR / f"split_{safe_name}" / f"story_{safe_name}_{timestamp}.mp3"
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     
     # Voice parameters for more realistic, human-like tone
     # rate: slower speech (-8%) for better comprehension and natural pacing
