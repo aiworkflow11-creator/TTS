@@ -1,5 +1,10 @@
 # Requirements for the TTS notebook
 # Install with: python -m pip install -r requirements.txt
+#
+# SYSTEM DEPENDENCY: ffmpeg must be installed on your system
+# Ubuntu/Debian: sudo apt-get install -y ffmpeg
+# macOS: brew install ffmpeg
+# Windows: Download from https://ffmpeg.org/download.html
 
 # Automatically generated list of installed packages
 # pinned to the exact versions from the current notebook environment.
